@@ -5,6 +5,12 @@
     box-sizing: border-box;
 }
 
+:root{
+    --bg-color:#000;
+    --primary-text:#040D12;
+    --secondary-text:#2C3333;
+    --light-grey:#D1D1D1;
+}
 
 html{
     font-size: 64.5%;
@@ -28,48 +34,52 @@ html{
     max-width: 1000px;
     margin: 20px auto;
     padding: 20px;
-    border: 2px solid #000;
+    border: 2px solid var(--bg-color);
   }
   
   #user__info {
-    text-align: center;
-    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem;
   }
   
 
   #user__info .user {
     display: flex;
     align-items: center;
-    grid-area: 1rem;
+    gap: 4rem;
 
   }
 
-  #user__info .user  img{
+  #user__info .user .user__img{
     max-width: 250px;
     width: 100%;
+    height: 100%;
     border-radius: 50%;
+    border: 2px solid var(--light-grey);
+    object-fit: contain;
   }
 
   #user__info .user .bio{
       display: flex;
       flex-direction: column;
-      grid-area: 1rem;
+      gap: 1rem;
   }
 
 
   #user__info .user  .bio h2{
     font-size: 4rem;
-    font-weight: 800;
+    font-weight: 600;
+    color: var(--primary-text);
   }
  
   #user__info .user  .bio p{
     font-size: 1.8rem;
     font-weight: 500;
+    color: var(--secondary-text);
   }
   #user__info .user  .bio .location{
     display: flex;
-    align-items: center;
-    gap: 1rem;
     cursor: pointer;
   }
 
@@ -82,6 +92,7 @@ html{
   #user__info .user  .bio .location span{
     font-size: 1.6rem;
     font-weight: 500;
+    color: var(--secondary-text);
   }
   #user__info .user  .bio .twitter{
     font-size: 1.6rem;
@@ -89,15 +100,15 @@ html{
   }
 
   #user__info .user  .bio .twitter a{
-    font-size: 1.6rem;
+    font-size: 1.4rem;
     font-weight: 500; 
+    color: var(--secondary-text);
   }
 
 
   #user__info .github{
     display: flex;
     align-items: center;
-    justify-content: center;
     gap: 1rem;
     cursor: pointer;
   }
@@ -107,8 +118,9 @@ html{
     height: 2.5rem;
   }
   #user__info .github a{
-    font-size: 1.6rem;
+    font-size: 1.4rem;
     font-weight: 500; 
+    color: var(--secondary-text);
   }
 
 

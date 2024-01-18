@@ -35,13 +35,35 @@ document.addEventListener('DOMContentLoaded', function () {
       });
   
     function displayUser(user) {
-      const userContainer = document.getElementById('user-info');
-      // userContainer.innerHTML = `
-      //   <h2>${user.login}</h2>
-      //   <img src="${user.avatar_url}" alt="Profile Image">
-      //   <p>Followers: ${user.followers}</p>
-      //   <p>Following: ${user.following}</p>
-      // `;
+      const userContainer = document.getElementById('user__info');
+      const userWrapper = document.getElementsByClassName('user');
+      // const userBio = document.getElementsByClassName('bio');
+      // const location = document.getElementsByClassName('location');
+      // const github = document.getElementsByClassName('github');
+     
+      const userNewBio = document.createElement('div')
+      userContainer.appendChild(userWrapper) 
+      userWrapper.appendChild(userBio)
+      userBio.appendChild(location)
+      userWrapper.appendChild(github)
+      userWrapper.innerHTML = `
+      <img src="${user.avatar_url}" alt="Profile Image" class="profile-image">
+           `;
+
+        userNewBio.innerHTML = `
+        <h2>${user.name}</h2>
+        <p>${user.bio}</p>
+        <span>${user.twitter_username}</span>
+      `;
+
+      location.innerHTML = `
+        <span>${user.location}</span>
+      `;
+      github.innerHTML = `
+
+        <a href="${user.url}" target="_blank" rel="noopener noreferrer"></a>
+        
+      `;
     }
   
     function displayRepos(repos) {
