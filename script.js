@@ -42,6 +42,9 @@ document.addEventListener('DOMContentLoaded', function () {
       });
   }
   
+  
+
+  // Fetch User
     function displayUser(user) {
       const userContainer = document.getElementById('user__info');
       const userBio = document.getElementsByClassName('bio');
@@ -68,7 +71,7 @@ document.addEventListener('DOMContentLoaded', function () {
             <a href="${user.url}">${user.url}</a>
             </div>    
 
-           `;
+      `;
 
       fetchRepositories();
 
@@ -92,8 +95,9 @@ document.addEventListener('DOMContentLoaded', function () {
         font-weight:700>${repo.language}</span>
         `;
       
-        displayPagination(repos.length)
       });
+      displayPagination(repos.length)
+      console.log(repos.length)
     }
 
   // Pagination of user
