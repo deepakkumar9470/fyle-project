@@ -2,8 +2,9 @@
 document.addEventListener('DOMContentLoaded', function () {
     const username = 'deepakkumar9470';
     const userApiUrl = `https://api.github.com/users/${username}`;
-    const reposApiUrl = `https://api.github.com/users/${username}/repos`;
-
+    let currentPage = 1;
+    let repositoriesPerPage = 10;  
+    showLoading()
     fetch(userApiUrl)
       .then(response => {
         if (!response.ok) {
@@ -12,14 +13,18 @@ document.addEventListener('DOMContentLoaded', function () {
         return response.json();
       })
       .then(user => {
-        console.log('user :', user)
+        hideLoading()
         displayUser(user);
       })
       .catch(error => {
+        hideLoading()
         console.error('Error fetching user data:', error.message);
       });
   
-    // Fetch user repositories
+    // Fetch user repositories with pagination
+  function fetchRepositories() {
+    const reposApiUrl = `https://api.github.com/users/${username}/repos?page=${currentPage}&per_page=${repositoriesPerPage}`;
+    showLoading();
     fetch(reposApiUrl)
       .then(response => {
         if (!response.ok) {
@@ -28,23 +33,19 @@ document.addEventListener('DOMContentLoaded', function () {
         return response.json();
       })
       .then(repos => {
+        hideLoading();
         displayRepos(repos);
       })
       .catch(error => {
+        hideLoading();
         console.error('Error fetching repositories:', error.message);
       });
+  }
   
     function displayUser(user) {
       const userContainer = document.getElementById('user__info');
-      const userWrapper = document.getElementsByClassName('user');
       const userBio = document.getElementsByClassName('bio');
-      // const location = document.getElementsByClassName('location');
-      // const github = document.getElementsByClassName('github');     
-      // const userNewBio = document.createElement('div')
-      // userContainer.appendChild(userWrapper) 
-      // userWrapper.appendChild(userBio)
-      // userBio.appendChild(location)
-      // userWrapper.appendChild(github)
+      
       userContainer.append(userBio)
 
       userContainer.innerHTML = `
@@ -69,34 +70,79 @@ document.addEventListener('DOMContentLoaded', function () {
 
            `;
 
-        // userNewBio.innerHTML = `
-        // <h2>${user.name}</h2>
-        // <p>${user.bio}</p>
-        // <span>${user.twitter_username}</span>
-      // `;
+      fetchRepositories();
 
-      // location.innerHTML = `
-      //   <span>${user.location}</span>
-      // `;
-      // github.innerHTML = `
 
-      //   <a href="${user.url}" target="_blank" rel="noopener noreferrer"></a>
-        
-      // `;
     }
   
+    // Displaying respos of user from api
     function displayRepos(repos) {
-      const repoList = document.getElementById('repo-list');
-  
+      const repoList = document.getElementById('repo__list');
+      
       repos.forEach(repo => {
-        const listItem = document.createElement('li');
-        listItem.classList.add('repo-item');
-        listItem.innerHTML = `
-          <span>${repo.name}</span>
-          <a href="${repo.html_url}" target="_blank" rel="noopener noreferrer">View on GitHub</a>
+        const repoCard = document.createElement('div')
+        repoList.append(repoCard)
+        repoCard.classList.add('repo__card')
+        repoCard.innerHTML = `
+        <h3 style="font-size:2.4rem;font-weight:700;color:#5F85DB;
+        text-transform:capitalize">${repo.name}</h3>
+        <p style="font-size:1.6rem;font-weight:500">${repo.description}</p>
+        <span style="width:max-content;padding:1rem 2rem;border-radius:0.5rem;
+        background-color:#5F85DB;color:#fff";font-size:2rem;
+        font-weight:700>${repo.language}</span>
         `;
-        repoList.appendChild(listItem);
+      
+        displayPagination(repos.length)
       });
     }
+
+  // Pagination of user
+    function displayPagination(repoCount) {
+      const paginationContainer = document.getElementById('pagination');
+      paginationContainer.innerHTML = '';
+
+      const totalPages = Math.ceil(repoCount / repositoriesPerPage);
+
+      for (let i = 1; i <= totalPages; i++) {
+        const pageButton = document.createElement('button');
+        pageButton.textContent = i;
+        pageButton.addEventListener('click', () => {
+          currentPage = i;
+          fetchRepositories();
+        });
+        paginationContainer.appendChild(pageButton);
+      }
+
+      if (currentPage > 1) {
+        const prevButton = document.createElement('button');
+        prevButton.textContent = 'Older';
+        prevButton.addEventListener('click', () => {
+          currentPage--;
+          fetchRepositories();
+        });
+        paginationContainer.insertBefore(prevButton, paginationContainer.firstChild);
+      }
+      if (currentPage < totalPages) {
+        const nextButton = document.createElement('button');
+        nextButton.textContent = 'Newer';
+        nextButton.addEventListener('click', () => {
+          currentPage++;
+          fetchRepositories();
+        });
+        paginationContainer.appendChild(nextButton);
+      }
+    }
+
+
+    function showLoading() {
+      const loadingContainer = document.getElementById('loading');
+      loadingContainer.style.display = 'block';
+    }
+  
+    function hideLoading() {
+      const loadingContainer = document.getElementById('loading');
+      loadingContainer.style.display = 'none';
+    }
+
   });
   
